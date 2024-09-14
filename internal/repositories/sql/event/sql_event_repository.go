@@ -48,7 +48,7 @@ func (r *EventRepository) GetEvent(req *eventModel.GetEventRequest) (*eventModel
 	event := &models.Event{}
 	exec := r.db.Master().Preload(PreloadEventLocation).First(event, "event_id = ?", req.EventID)
 	if errors.Is(exec.Error, gorm.ErrRecordNotFound) {
-		r.logger.Error("event not found", zap.String("event_id", req.EventID))
+		r.logger.Error("event not found", zap.String("event_id", req.EventID.String()))
 		return &eventModel.GetEventResponse{}, nil
 	}
 

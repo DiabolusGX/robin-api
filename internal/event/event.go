@@ -1,6 +1,7 @@
 package event
 
 import (
+	"github.com/RobinHoodArmyHQ/robin-api/pkg/nanoid"
 	"net/http"
 
 	"github.com/RobinHoodArmyHQ/robin-api/internal/env"
@@ -31,7 +32,7 @@ func CreateEventHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, &models.CreateEventResponse{
-		Status:  models.StatusSuccess("Event created successfully"),
+		Status:  models.StatusSuccess(),
 		EventId: resp.EventID,
 	})
 }
@@ -45,14 +46,14 @@ func GetEventHandler(c *gin.Context) {
 		return
 	}
 
-	resp, err := ev.EventRepository.GetEvent(&event.GetEventRequest{EventID: eventID})
+	resp, err := ev.EventRepository.GetEvent(&event.GetEventRequest{EventID: nanoid.NanoID(eventID)})
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, models.StatusFailed(err.Error()))
 		return
 	}
 
 	c.JSON(http.StatusOK, &models.GetEventResponse{
-		Status: models.StatusSuccess("Event fetched successfully"),
+		Status: models.StatusSuccess(),
 		Event:  resp.Event,
 	})
 }
